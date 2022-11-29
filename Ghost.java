@@ -26,31 +26,23 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 	}
 	
 	public void updatePellet() { //update pellet status
-		int tempX, tempY;
-		tempX = x/gridSize-1;
-		tempY = y/gridSize-1;
+		int tempX = x/gridSize-1;
+		int tempY = y/gridSize-1;
 		if (tempX!=pelletX || tempY!=pelletY) {
 			lastPelletX = pelletX;
 			lastPelletY = pelletY;
 			pelletX = tempX;
 			pelletY = tempY;
 		}
-		
 	}
 	
 	public boolean isChoiceDest() { //Determines if the location is one where the ghost has to make a decision
-		if (x%gridSize==0 && y%gridSize==0) {
-			return true;
-		}
-		return false;
+		return x%gridSize==0 && y%gridSize==0;
 	}
 	
 	public char newDirection() { //Chooses a new direction randomly for the ghost to move
-		int random;
 		char backwards = 'U';
-		int newX = x, newY = y;
 		int lookX = x, lookY = y;
-		Set<Character> set = new HashSet<Character>();
 		switch (direction) {
 			case 'L':
 				backwards = 'R';
@@ -66,36 +58,30 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 				break;
 		}
 		char newDirection = backwards;
+		Set<Character> set = new HashSet<>();
 		while (newDirection==backwards || !isValidDest(lookX, lookY)) { //While we still haven't found a valid direction
 			if (set.size()==3) { //If we've tried every location, turn around and break the loop
 				newDirection = backwards;
 				break;
 			}
-			newX = x;
-			newY = y;
 			lookX = x;
 			lookY = y;
-			
 			/* Randomly choose a direction */
-			random = (int) (Math.random()*4)+1;
+			int random = (int) (Math.random()*4)+1;
 			if (random==1) {
 				newDirection = 'L';
-				newX -= increment;
 				lookX -= increment;
 			} else if (random==2) {
 				newDirection = 'R';
-				newX += increment;
 				lookX += gridSize;
 			} else if (random==3) {
 				newDirection = 'U';
-				newY -= increment;
 				lookY -= increment;
 			} else if (random==4) {
 				newDirection = 'D';
-				newY += increment;
 				lookY += gridSize;
 			}
-			if (newDirection!=backwards) set.add(new Character(newDirection));
+			if (newDirection!=backwards) set.add(newDirection);
 		}
 		return newDirection;
 	}

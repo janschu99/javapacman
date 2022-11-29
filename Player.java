@@ -33,11 +33,8 @@ class Player extends Mover { //This is the pacman object
 	}
 	
 	public char newDirection() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
-		int random;
 		char backwards = 'U';
-		int newX = x, newY = y;
 		int lookX = x, lookY = y;
-		Set<Character> set = new HashSet<Character>();
 		switch (direction) {
 			case 'L':
 				backwards = 'R';
@@ -53,43 +50,35 @@ class Player extends Mover { //This is the pacman object
 				break;
 		}
 		char newDirection = backwards;
+		Set<Character> set = new HashSet<>();
 		while (newDirection==backwards || !isValidDest(lookX, lookY)) {
 			if (set.size()==3) {
 				newDirection = backwards;
 				break;
 			}
-			newX = x;
-			newY = y;
 			lookX = x;
 			lookY = y;
-			random = (int) (Math.random()*4)+1;
+			int random = (int) (Math.random()*4)+1;
 			if (random==1) {
 				newDirection = 'L';
-				newX -= increment;
 				lookX -= increment;
 			} else if (random==2) {
 				newDirection = 'R';
-				newX += increment;
 				lookX += gridSize;
 			} else if (random==3) {
 				newDirection = 'U';
-				newY -= increment;
 				lookY -= increment;
 			} else if (random==4) {
 				newDirection = 'D';
-				newY += increment;
 				lookY += gridSize;
 			}
-			if (newDirection!=backwards) set.add(new Character(newDirection));
+			if (newDirection!=backwards) set.add(newDirection);
 		}
 		return newDirection;
 	}
 	
 	public boolean isChoiceDest() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
-		if (x%gridSize==0 && y%gridSize==0) {
-			return true;
-		}
-		return false;
+		return x%gridSize==0 && y%gridSize==0;
 	}
 	
 	public void demoMove() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
@@ -101,7 +90,7 @@ class Player extends Mover { //This is the pacman object
 				if (isValidDest(x-increment, y)) {
 					x -= increment;
 				} else if (y==9*gridSize && x<2*gridSize) {
-					x = max-gridSize*1;
+					x = max-gridSize;
 					teleport = true;
 				}
 				break;
@@ -109,7 +98,7 @@ class Player extends Mover { //This is the pacman object
 				if (isValidDest(x+gridSize, y)) {
 					x += increment;
 				} else if (y==9*gridSize && x>max-gridSize*2) {
-					x = 1*gridSize;
+					x = gridSize;
 					teleport = true;
 				}
 				break;
@@ -127,9 +116,9 @@ class Player extends Mover { //This is the pacman object
 	}
 	
 	public void move() { //The move function moves the pacman for one frame in non demo mode
-		int gridSize = 20;
 		lastX = x;
 		lastY = y;
+		int gridSize = 20;
 		/* Try to turn in the direction input by the user */
 		/*Can only turn if we're in center of a grid*/
 		if (x%20==0 && y%20==0 ||
@@ -137,8 +126,7 @@ class Player extends Mover { //This is the pacman object
 				(desiredDirection=='L' && currDirection=='R') ||
 				(desiredDirection=='R' && currDirection=='L') ||
 				(desiredDirection=='U' && currDirection=='D') ||
-				(desiredDirection=='D' && currDirection=='U')
-		) {
+				(desiredDirection=='D' && currDirection=='U')) {
 			switch (desiredDirection) {
 				case 'L':
 					if (isValidDest(x-increment, y)) x -= increment;
@@ -159,14 +147,14 @@ class Player extends Mover { //This is the pacman object
 				case 'L':
 					if (isValidDest(x-increment, y)) x -= increment;
 					else if (y==9*gridSize && x<2*gridSize) {
-						x = max-gridSize*1;
+						x = max-gridSize;
 						teleport = true;
 					}
 					break;
 				case 'R':
 					if (isValidDest(x+gridSize, y)) x += increment;
 					else if (y==9*gridSize && x>max-gridSize*2) {
-						x = 1*gridSize;
+						x = gridSize;
 						teleport = true;
 					}
 					break;

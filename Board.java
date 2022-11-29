@@ -1,34 +1,16 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
-import javax.imageio.*;
 import javax.swing.JPanel;
-
-import java.lang.Math;
-import java.util.*;
-import java.io.*;
 
 public class Board extends JPanel { //This board class contains the player, ghosts, pellets, and most of the game logic.
 	/* Initialize the images*/
-	/* For JAR File*/
-  /*
-  Image pacmanImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/pacman.jpg"));
-  Image pacmanUpImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/pacmanup.jpg")); 
-  Image pacmanDownImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/pacmandown.jpg")); 
-  Image pacmanLeftImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/pacmanleft.jpg")); 
-  Image pacmanRightImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/pacmanright.jpg")); 
-  Image ghost10 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost10.jpg")); 
-  Image ghost20 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost20.jpg")); 
-  Image ghost30 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost30.jpg")); 
-  Image ghost40 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost40.jpg")); 
-  Image ghost11 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost11.jpg")); 
-  Image ghost21 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost21.jpg")); 
-  Image ghost31 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost31.jpg")); 
-  Image ghost41 = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/ghost41.jpg")); 
-  Image titleScreenImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/titleScreen.jpg")); 
-  Image gameOverImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/gameOver.jpg")); 
-  Image winScreenImage = Toolkit.getDefaultToolkit().getImage(Pacman.class.getResource("img/winScreen.jpg"));
-  */
-	/* For NOT JAR file*/
 	Image pacmanImage = Toolkit.getDefaultToolkit().getImage("img/pacman.jpg");
 	Image pacmanUpImage = Toolkit.getDefaultToolkit().getImage("img/pacmanup.jpg");
 	Image pacmanDownImage = Toolkit.getDefaultToolkit().getImage("img/pacmandown.jpg");
@@ -89,33 +71,30 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	}
 	
 	public void initHighScores() { //Reads the high scores file and saves it
-		File file = new File("highScores.txt");
-		Scanner sc;
 		try {
-			sc = new Scanner(file);
+			File file = new File("highScores.txt");
+			Scanner sc = new Scanner(file);
 			highScore = sc.nextInt();
 			sc.close();
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 	}
 	
 	public void updateScore(int score) { //Writes the new high score to a file and sets flag to update it on screen
-		PrintWriter out;
 		try {
-			out = new PrintWriter("highScores.txt");
+			PrintWriter out = new PrintWriter("highScores.txt");
 			out.println(score);
 			out.close();
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 		highScore = score;
 		clearHighScores = true;
 	}
 	
 	public void clearHighScores() { //Wipes the high scores file and sets flag to update it on screen
-		PrintWriter out;
 		try {
-			out = new PrintWriter("highScores.txt");
+			PrintWriter out = new PrintWriter("highScores.txt");
 			out.println("0");
 			out.close();
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 		highScore = 0;
 		clearHighScores = true;
 	}
@@ -143,7 +122,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	}
 	
 	/* Function is called during drawing of the map.
-	   Whenever the a portion of the map is covered up with a barrier,
+	   Whenever a portion of the map is covered up with a barrier,
 	   the map and pellets arrays are updated accordingly to note
 	   that those are invalid locations to travel or put pellets
 	*/
@@ -291,11 +270,12 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		}
 	}
 	
-	public void fillPellet(int x, int y, Graphics g) { //Draws one individual pellet.  Used to redraw pellets that ghosts have run over
+	public static void fillPellet(int x, int y, Graphics g) { //Draws one individual pellet.  Used to redraw pellets that ghosts have run over
 		g.setColor(Color.YELLOW);
 		g.fillOval(x*20+28, y*20+28, 4, 4);
 	}
 	
+	@Override
 	public void paint(Graphics g) { //This is the main function that draws one entire frame of the game
 		if (dying>0) { //If we're playing the dying animation, don't update the entire screen. Just kill the pacman
 			sounds.nomNomStop(); //Stop any pacman eating sounds
@@ -335,14 +315,16 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			New = 1;
 			return;
-		} else if (winScreen) { //If this is the win screen, draw the win screen and return
+		}
+		if (winScreen) { //If this is the win screen, draw the win screen and return
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 600);
 			g.drawImage(winScreenImage, 0, 0, Color.BLACK, null);
 			New = 1;
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			return;
-		} else if (overScreen) { //If this is the game over screen, draw the game over screen and return
+		}
+		if (overScreen) { //If this is the game over screen, draw the game over screen and return
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 600);
 			g.drawImage(gameOverImage, 0, 0, Color.BLACK, null);
@@ -350,16 +332,15 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			return;
 		}
-		if (clearHighScores) { //If need to update the high scores, redraw the top menu bar
+		if (clearHighScores) { //If we need to update the high scores, redraw the top menu bar
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 18);
 			g.setColor(Color.YELLOW);
 			g.setFont(font);
 			clearHighScores = false;
 			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+(currScore)+"\t High Score: "+highScore, 20, 10);
+			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
 		}
-		boolean oops = false; //oops is set to true when pacman has lost a life
 		if (New==1) { //Game initialization
 			reset();
 			player = new Player(200, 300);
@@ -381,7 +362,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			g.setColor(Color.YELLOW);
 			g.setFont(font);
 			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+(currScore)+"\t High Score: "+highScore, 20, 10);
+			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
 			New++;
 		} else if (New==2) New++; //Second frame of new game
 		else if (New==3) { //Third frame of new game
@@ -402,6 +383,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		g.copyArea(ghost3.x-20, ghost3.y-20, 80, 80, 0, 0);
 		g.copyArea(ghost4.x-20, ghost4.y-20, 80, 80, 0, 0);
 		/* Detect collisions */
+		boolean oops = false; //oops is set to true when pacman has lost a life
 		if (player.x==ghost1.x && Math.abs(player.y-ghost1.y)<10) oops = true;
 		else if (player.x==ghost2.x && Math.abs(player.y-ghost2.y)<10) oops = true;
 		else if (player.x==ghost3.x && Math.abs(player.y-ghost3.y)<10) oops = true;
@@ -441,7 +423,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			g.setColor(Color.YELLOW);
 			g.setFont(font);
 			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+(currScore)+"\t High Score: "+highScore, 20, 10);
+			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
 			if (player.pelletsEaten==173) { //If this was the last pellet
 				if (!demo) { //Demo mode can't get a high score
 					if (currScore>highScore) updateScore(currScore);
@@ -451,7 +433,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			}
 		}
 		/* If we moved to a location without pellets, stop the sounds */
-		else if ((player.pelletX!=lastPelletEatenX || player.pelletY!=lastPelletEatenY) || player.stopped)
+		else if (player.pelletX!=lastPelletEatenX || player.pelletY!=lastPelletEatenY || player.stopped)
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 		/* Replace pellets that have been run over by ghosts */
 		if (pellets[ghost1.lastPelletX][ghost1.lastPelletY]) fillPellet(ghost1.lastPelletX, ghost1.lastPelletY, g);
