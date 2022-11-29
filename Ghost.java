@@ -12,8 +12,8 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 	}
 	
 	public void updatePellet() { //update pellet status
-		int tempX = x/gridSize-1;
-		int tempY = y/gridSize-1;
+		int tempX = x/Pacman.GRID_SIZE-1;
+		int tempY = y/Pacman.GRID_SIZE-1;
 		if (tempX!=pelletX || tempY!=pelletY) {
 			lastPelletX = pelletX;
 			lastPelletY = pelletY;
@@ -52,16 +52,16 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 			int random = (int) (Math.random()*4)+1;
 			if (random==1) {
 				newDirection = 'L';
-				lookX -= increment;
+				lookX -= Pacman.INCREMENT;
 			} else if (random==2) {
 				newDirection = 'R';
-				lookX += gridSize;
+				lookX += Pacman.GRID_SIZE;
 			} else if (random==3) {
 				newDirection = 'U';
-				lookY -= increment;
+				lookY -= Pacman.INCREMENT;
 			} else if (random==4) {
 				newDirection = 'D';
-				lookY += gridSize;
+				lookY += Pacman.GRID_SIZE;
 			}
 			if (newDirection!=backwards) set.add(newDirection);
 		}
@@ -74,16 +74,16 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 		if (isChoiceDest()) direction = newDirection(); //If we can make a decision, pick a new direction randomly
 		switch (direction) { //If that direction is valid, move that way
 			case 'L':
-				if (isValidDest(x-increment, y)) x -= increment;
+				if (isValidDest(x-Pacman.INCREMENT, y)) x -= Pacman.INCREMENT;
 				break;
 			case 'R':
-				if (isValidDest(x+gridSize, y)) x += increment;
+				if (isValidDest(x+Pacman.GRID_SIZE, y)) x += Pacman.INCREMENT;
 				break;
 			case 'U':
-				if (isValidDest(x, y-increment)) y -= increment;
+				if (isValidDest(x, y-Pacman.INCREMENT)) y -= Pacman.INCREMENT;
 				break;
 			case 'D':
-				if (isValidDest(x, y+gridSize)) y += increment;
+				if (isValidDest(x, y+Pacman.GRID_SIZE)) y += Pacman.INCREMENT;
 				break;
 		}
 	}

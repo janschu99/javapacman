@@ -44,9 +44,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	int numLives = 2;
 	boolean[][] state; //Contains the game map, passed to player and ghosts
 	boolean[][] pellets; //Contains the state of all pellets
-	/* Game dimensions */
-	int gridSize;
-	int max;
 	/* State flags*/
 	boolean stopped;
 	boolean titleScreen;
@@ -64,8 +61,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		sounds = new GameSounds();
 		currScore = 0;
 		stopped = false;
-		max = 400;
-		gridSize = 20;
 		New = 0;
 		titleScreen = true;
 	}
@@ -101,10 +96,10 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	
 	public void reset() { //Reset occurs on a new game
 		numLives = 2;
-		state = new boolean[20][20];
-		pellets = new boolean[20][20];
-		for (int i = 0; i<20; i++) { //Clear state and pellets arrays
-			for (int j = 0; j<20; j++) {
+		state = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
+		pellets = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
+		for (int i = 0; i<Pacman.BOARD_SIZE; i++) { //Clear state and pellets arrays
+			for (int j = 0; j<Pacman.BOARD_SIZE; j++) {
 				state[i][j] = true;
 				pellets[i][j] = true;
 			}
@@ -127,8 +122,8 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	   that those are invalid locations to travel or put pellets
 	*/
 	public void updateMap(int x, int y, int width, int height) {
-		for (int i = x/gridSize; i<x/gridSize+width/gridSize; i++) {
-			for (int j = y/gridSize; j<y/gridSize+height/gridSize; j++) {
+		for (int i = x/Pacman.GRID_SIZE; i<x/Pacman.GRID_SIZE+width/Pacman.GRID_SIZE; i++) {
+			for (int j = y/Pacman.GRID_SIZE; j<y/Pacman.GRID_SIZE+height/Pacman.GRID_SIZE; j++) {
 				state[i-1][j-1] = false;
 				pellets[i-1][j-1] = false;
 			}
@@ -139,17 +134,17 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	   Also draws the menu */
 	public void drawLives(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, max+5, 600, gridSize); //Clear the bottom bar
+		g.fillRect(0, Pacman.MAX+5, 600, Pacman.GRID_SIZE); //Clear the bottom bar
 		g.setColor(Color.YELLOW);
 		for (int i = 0; i<numLives; i++) { //Draw each life
-			g.fillOval(gridSize*(i+1), max+5, gridSize, gridSize);
+			g.fillOval(Pacman.GRID_SIZE*(i+1), Pacman.MAX+5, Pacman.GRID_SIZE, Pacman.GRID_SIZE);
 		}
 		/* Draw the menu items */
 		g.setColor(Color.YELLOW);
 		g.setFont(font);
-		g.drawString("Reset", 100, max+5+gridSize);
-		g.drawString("Clear High Scores", 180, max+5+gridSize);
-		g.drawString("Exit", 350, max+5+gridSize);
+		g.drawString("Reset", 100, Pacman.MAX+5+Pacman.GRID_SIZE);
+		g.drawString("Clear High Scores", 180, Pacman.MAX+5+Pacman.GRID_SIZE);
+		g.drawString("Exit", 350, Pacman.MAX+5+Pacman.GRID_SIZE);
 	}
 	
 	/*  This function draws the board.  The pacman board is really complicated and can only feasibly be done
@@ -263,8 +258,8 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	
 	public void drawPellets(Graphics g) { //Draws the pellets on the screen
 		g.setColor(Color.YELLOW);
-		for (int i = 1; i<20; i++) {
-			for (int j = 1; j<20; j++) {
+		for (int i = 1; i<Pacman.BOARD_SIZE; i++) {
+			for (int j = 1; j<Pacman.BOARD_SIZE; j++) {
 				if (pellets[i-1][j-1]) g.fillOval(i*20+8, j*20+8, 4, 4);
 			}
 		}

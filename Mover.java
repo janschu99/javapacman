@@ -12,9 +12,6 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	int pelletY;
 	int frameCount = 0; //frameCount is used to count animation frames
 	boolean[][] state; //State contains the game map
-	int gridSize; //gridSize is the size of one square in the game.
-	int max; //max is the height/width of the game.
-	int increment; //increment is the speed at which the object moves, 1 increment per move() call
 	
 	public Mover(int x, int y) { //Generic constructor
 		direction = 'L';
@@ -22,22 +19,19 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 		this.lastY = y;
 		this.x = x;
 		this.y = y;
-		gridSize = 20;
-		pelletX = x/gridSize-1;
-		pelletY = y/gridSize-1;
-		increment = 4;
-		max = 400;
-		state = new boolean[20][20];
-		for (int i = 0; i<20; i++) {
-			for (int j = 0; j<20; j++) {
+		pelletX = x/Pacman.GRID_SIZE-1;
+		pelletY = y/Pacman.GRID_SIZE-1;
+		state = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
+		for (int i = 0; i<Pacman.BOARD_SIZE; i++) {
+			for (int j = 0; j<Pacman.BOARD_SIZE; j++) {
 				state[i][j] = false;
 			}
 		}
 	}
 	
 	public void updateState(boolean[][] state) { //Updates the state information
-		for (int i = 0; i<20; i++) {
-			for (int j = 0; j<20; j++) {
+		for (int i = 0; i<Pacman.BOARD_SIZE; i++) {
+			for (int j = 0; j<Pacman.BOARD_SIZE; j++) {
 				this.state[i][j] = state[i][j];
 			}
 		}
@@ -46,10 +40,10 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	public boolean isValidDest(int x, int y) { //Determines if a set of coordinates is a valid destination.
 	/* The first statements check that the x and y are inbounds.  The last statement checks the map to
 	   see if it's a valid location */
-		return (x%20==0 || y%20==0) && 20<=x && x<400 && 20<=y && y<400 && state[x/20-1][y/20-1];
+		return (x%Pacman.GRID_SIZE==0 || y%Pacman.GRID_SIZE==0) && Pacman.GRID_SIZE<=x && x<Pacman.MAX && Pacman.GRID_SIZE<=y && y<Pacman.MAX && state[x/Pacman.GRID_SIZE-1][y/Pacman.GRID_SIZE-1];
 	}
 	
 	public boolean isChoiceDest() { //Determines if the location is one where the mover can make a decision
-		return x%gridSize==0 && y%gridSize==0;
+		return x%Pacman.GRID_SIZE==0 && y%Pacman.GRID_SIZE==0;
 	}
 }
