@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
-
 class Ghost extends Mover { //Ghost class controls the ghost.
 	
 	int lastPelletX, lastPelletY; //The pellet the ghost was last on top of
@@ -20,52 +17,6 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 			pelletX = tempX;
 			pelletY = tempY;
 		}
-	}
-	
-	public char newDirection() { //Chooses a new direction randomly for the ghost to move
-		char backwards = 'U';
-		int lookX = x, lookY = y;
-		switch (direction) {
-			case 'L':
-				backwards = 'R';
-				break;
-			case 'R':
-				backwards = 'L';
-				break;
-			case 'U':
-				backwards = 'D';
-				break;
-			case 'D':
-				backwards = 'U';
-				break;
-		}
-		char newDirection = backwards;
-		Set<Character> set = new HashSet<>();
-		while (newDirection==backwards || !isValidDest(lookX, lookY)) { //While we still haven't found a valid direction
-			if (set.size()==3) { //If we've tried every location, turn around and break the loop
-				newDirection = backwards;
-				break;
-			}
-			lookX = x;
-			lookY = y;
-			/* Randomly choose a direction */
-			int random = (int) (Math.random()*4)+1;
-			if (random==1) {
-				newDirection = 'L';
-				lookX -= Pacman.INCREMENT;
-			} else if (random==2) {
-				newDirection = 'R';
-				lookX += Pacman.GRID_SIZE;
-			} else if (random==3) {
-				newDirection = 'U';
-				lookY -= Pacman.INCREMENT;
-			} else if (random==4) {
-				newDirection = 'D';
-				lookY += Pacman.GRID_SIZE;
-			}
-			if (newDirection!=backwards) set.add(newDirection);
-		}
-		return newDirection;
 	}
 	
 	public void move() { //Random move function for ghost

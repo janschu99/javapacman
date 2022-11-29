@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
-
 class Player extends Mover { //This is the pacman object
 	
 	/* Direction (inherited from Mover) is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
@@ -16,51 +13,6 @@ class Player extends Mover { //This is the pacman object
 		pelletsEaten = 0;
 		currDirection = 'L';
 		desiredDirection = 'L';
-	}
-	
-	public char newDirection() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
-		char backwards = 'U';
-		int lookX = x, lookY = y;
-		switch (direction) {
-			case 'L':
-				backwards = 'R';
-				break;
-			case 'R':
-				backwards = 'L';
-				break;
-			case 'U':
-				backwards = 'D';
-				break;
-			case 'D':
-				backwards = 'U';
-				break;
-		}
-		char newDirection = backwards;
-		Set<Character> set = new HashSet<>();
-		while (newDirection==backwards || !isValidDest(lookX, lookY)) {
-			if (set.size()==3) {
-				newDirection = backwards;
-				break;
-			}
-			lookX = x;
-			lookY = y;
-			int random = (int) (Math.random()*4)+1;
-			if (random==1) {
-				newDirection = 'L';
-				lookX -= Pacman.INCREMENT;
-			} else if (random==2) {
-				newDirection = 'R';
-				lookX += Pacman.GRID_SIZE;
-			} else if (random==3) {
-				newDirection = 'U';
-				lookY -= Pacman.INCREMENT;
-			} else if (random==4) {
-				newDirection = 'D';
-				lookY += Pacman.GRID_SIZE;
-			}
-			if (newDirection!=backwards) set.add(newDirection);
-		}
-		return newDirection;
 	}
 	
 	public void demoMove() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
