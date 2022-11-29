@@ -1,22 +1,21 @@
-import java.io.*;
 import java.net.URL;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class GameSounds { //This class controls all sound effects
 	
 	Clip nomNom;
 	Clip newGame;
 	Clip death;
-	boolean stopped; //Keeps track of whether or not the eating sound is playing
+	boolean stopped; //Keeps track of whether the eating sound is playing
 	
 	public GameSounds() { //Initialize audio files
 		stopped = true;
-		URL url;
-		AudioInputStream audioIn;
 		try {
-			url = this.getClass().getClassLoader().getResource("sounds/nomnom.wav"); //Pacman eating sound
-			audioIn = AudioSystem.getAudioInputStream(url);
+			URL url = this.getClass().getClassLoader().getResource("sounds/nomnom.wav"); //Pacman eating sound
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 			nomNom = AudioSystem.getClip();
 			nomNom.open(audioIn);
 			url = this.getClass().getClassLoader().getResource("sounds/newGame.wav"); //newGame
@@ -27,7 +26,7 @@ public class GameSounds { //This class controls all sound effects
 			audioIn = AudioSystem.getAudioInputStream(url);
 			death = AudioSystem.getClip();
 			death.open(audioIn);
-		} catch (Exception e) {}
+		} catch (Exception ignored) {}
 	}
 	
 	public void nomNom() { //Play pacman eating sound
