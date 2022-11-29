@@ -16,8 +16,15 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	int max; //max is the height/width of the game.
 	int increment; //increment is the speed at which the object moves, 1 increment per move() call
 	
-	public Mover() { //Generic constructor
+	public Mover(int x, int y) { //Generic constructor
+		direction = 'L';
+		this.lastX = x;
+		this.lastY = y;
+		this.x = x;
+		this.y = y;
 		gridSize = 20;
+		pelletX = x/gridSize-1;
+		pelletY = y/gridSize-1;
 		increment = 4;
 		max = 400;
 		state = new boolean[20][20];

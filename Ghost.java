@@ -6,15 +6,9 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 	int lastPelletX, lastPelletY; //The pellet the ghost was last on top of
 	
 	public Ghost(int x, int y) { //Constructor places ghost and updates states
-		direction = 'L';
-		pelletX = x/gridSize-1;
-		pelletY = x/gridSize-1;
+		super(x, y);
 		lastPelletX = pelletX;
 		lastPelletY = pelletY;
-		this.lastX = x;
-		this.lastY = y;
-		this.x = x;
-		this.y = y;
 	}
 	
 	public void updatePellet() { //update pellet status

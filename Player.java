@@ -11,14 +11,9 @@ class Player extends Mover { //This is the pacman object
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	
 	public Player(int x, int y) { //Constructor places pacman in initial location and orientation
+		super(x, y);
 		teleport = false;
 		pelletsEaten = 0;
-		pelletX = x/gridSize-1;
-		pelletY = y/gridSize-1;
-		this.lastX = x;
-		this.lastY = y;
-		this.x = x;
-		this.y = y;
 		currDirection = 'L';
 		desiredDirection = 'L';
 	}
