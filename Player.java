@@ -2,20 +2,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 class Player extends Mover { //This is the pacman object
-	/* Direction is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
-	char direction;
+	
+	/* Direction (inherited from Mover) is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
 	char currDirection;
 	char desiredDirection;
 	int pelletsEaten; //Keeps track of pellets eaten to determine end of game
-	/* Last location */
-	int lastX;
-	int lastY;
-	/* Current location */
-	int x;
-	int y;
-	/* Which pellet the pacman is on top of */
-	int pelletX;
-	int pelletY;
 	boolean teleport; //teleport is true when travelling through the teleport tunnels
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	

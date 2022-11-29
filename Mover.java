@@ -1,5 +1,15 @@
 class Mover { //Both Player and Ghost inherit Mover.  Has generic functions relevant to both
 	
+	char direction; //Direction mover is heading
+	/* Last location */
+	int lastX;
+	int lastY;
+	/* Current location */
+	int x;
+	int y;
+	/* Which pellet the mover is on top of */
+	int pelletX;
+	int pelletY;
 	int frameCount = 0; //frameCount is used to count animation frames
 	boolean[][] state; //State contains the game map
 	int gridSize; //gridSize is the size of one square in the game.

@@ -3,14 +3,6 @@ import java.util.Set;
 
 class Ghost extends Mover { //Ghost class controls the ghost.
 	
-	char direction; //Direction ghost is heading
-	/* Last ghost location*/
-	int lastX;
-	int lastY;
-	/* Current ghost location */
-	int x;
-	int y;
-	int pelletX, pelletY; //The pellet the ghost is on top of
 	int lastPelletX, lastPelletY; //The pellet the ghost was last on top of
 	
 	public Ghost(int x, int y) { //Constructor places ghost and updates states
