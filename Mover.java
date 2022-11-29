@@ -41,4 +41,8 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	   see if it's a valid location */
 		return (x%20==0 || y%20==0) && 20<=x && x<400 && 20<=y && y<400 && state[x/20-1][y/20-1];
 	}
+	
+	public boolean isChoiceDest() { //Determines if the location is one where the mover can make a decision
+		return x%gridSize==0 && y%gridSize==0;
+	}
 }

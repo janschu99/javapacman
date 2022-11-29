@@ -68,10 +68,6 @@ class Player extends Mover { //This is the pacman object
 		return newDirection;
 	}
 	
-	public boolean isChoiceDest() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
-		return x%gridSize==0 && y%gridSize==0;
-	}
-	
 	public void demoMove() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
 		lastX = x;
 		lastY = y;

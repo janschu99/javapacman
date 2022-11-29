@@ -28,10 +28,6 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 		}
 	}
 	
-	public boolean isChoiceDest() { //Determines if the location is one where the ghost has to make a decision
-		return x%gridSize==0 && y%gridSize==0;
-	}
-	
 	public char newDirection() { //Chooses a new direction randomly for the ghost to move
 		char backwards = 'U';
 		int lookX = x, lookY = y;
