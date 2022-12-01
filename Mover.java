@@ -32,6 +32,32 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 		}
 	}
 	
+	public boolean doMove(char dir, boolean allowTeleport) { //Returns whether teleportation happened
+		switch (dir) {
+			case 'L':
+				if (isValidDest(x-Pacman.INCREMENT, y)) x -= Pacman.INCREMENT;
+				else if (allowTeleport && y==9*Pacman.GRID_SIZE && x<2*Pacman.GRID_SIZE) {
+					x = Pacman.MAX-Pacman.GRID_SIZE;
+					return true;
+				}
+				break;
+			case 'R':
+				if (isValidDest(x+Pacman.GRID_SIZE, y)) x += Pacman.INCREMENT;
+				else if (allowTeleport && y==9*Pacman.GRID_SIZE && x>Pacman.MAX-Pacman.GRID_SIZE*2) {
+					x = Pacman.GRID_SIZE;
+					return true;
+				}
+				break;
+			case 'U':
+				if (isValidDest(x, y-Pacman.INCREMENT)) y -= Pacman.INCREMENT;
+				break;
+			case 'D':
+				if (isValidDest(x, y+Pacman.GRID_SIZE)) y += Pacman.INCREMENT;
+				break;
+		}
+		return false;
+	}
+	
 	public char newDirection() { //Chooses a new direction randomly for the mover to move
 		char backwards = 'U';
 		int lookX = x, lookY = y;

@@ -23,19 +23,6 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 		lastX = x;
 		lastY = y;
 		if (isChoiceDest()) direction = newDirection(); //If we can make a decision, pick a new direction randomly
-		switch (direction) { //If that direction is valid, move that way
-			case 'L':
-				if (isValidDest(x-Pacman.INCREMENT, y)) x -= Pacman.INCREMENT;
-				break;
-			case 'R':
-				if (isValidDest(x+Pacman.GRID_SIZE, y)) x += Pacman.INCREMENT;
-				break;
-			case 'U':
-				if (isValidDest(x, y-Pacman.INCREMENT)) y -= Pacman.INCREMENT;
-				break;
-			case 'D':
-				if (isValidDest(x, y+Pacman.GRID_SIZE)) y += Pacman.INCREMENT;
-				break;
-		}
+		doMove(direction, false); //If that direction is valid, move that way
 	}
 }
