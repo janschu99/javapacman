@@ -96,7 +96,7 @@ class Player extends Mover { //This is the pacman object
 			}
 		} else currDirection = desiredDirection; //If we did change direction, update currDirection to reflect that
 		if (lastX==x && lastY==y) stopped = true; //If we didn't move at all, set the stopped flag
-		else { //Otherwise, clear the stopped flag and INCREMENT the frameCount for animation purposes
+		else { //Otherwise, clear the stopped flag and increment the frameCount for animation purposes
 			stopped = false;
 			frameCount++;
 		}
