@@ -9,10 +9,9 @@ public class GameSounds { //This class controls all sound effects
 	Clip nomNom;
 	Clip newGame;
 	Clip death;
-	boolean stopped; //Keeps track of whether the eating sound is playing
+	boolean stopped = true; //Keeps track of whether the eating sound is playing
 	
 	public GameSounds() { //Initialize audio files
-		stopped = true;
 		try {
 			URL url = this.getClass().getClassLoader().getResource("sounds/nomnom.wav"); //Pacman eating sound
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);

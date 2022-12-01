@@ -38,31 +38,26 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	   pacman is in the process of dying */
 	int dying = 0;
 	/* Score information */
-	int currScore;
+	int currScore = 0;
 	int highScore;
 	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
 	int numLives = 2;
 	boolean[][] state; //Contains the game map, passed to player and ghosts
 	boolean[][] pellets; //Contains the state of all pellets
 	/* State flags*/
-	boolean stopped;
-	boolean titleScreen;
+	boolean stopped = false;
+	boolean titleScreen = true;
 	boolean winScreen = false;
 	boolean overScreen = false;
 	boolean demo = false;
-	int New;
-	GameSounds sounds; //Used to call sound effects
+	int New = 0;
+	GameSounds sounds = new GameSounds(); //Used to call sound effects
 	int lastPelletEatenX = 0;
 	int lastPelletEatenY = 0;
 	Font font = new Font("Monospaced", Font.BOLD, 12); //This is the font used for the menus
 	
 	public Board() { //Constructor initializes state flags etc.
 		initHighScores();
-		sounds = new GameSounds();
-		currScore = 0;
-		stopped = false;
-		New = 0;
-		titleScreen = true;
 	}
 	
 	public void initHighScores() { //Reads the high scores file and saves it

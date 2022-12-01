@@ -3,7 +3,7 @@ import java.util.Set;
 
 class Mover { //Both Player and Ghost inherit Mover.  Has generic functions relevant to both
 	
-	char direction; //Direction mover is heading
+	char direction = 'L'; //Direction mover is heading
 	/* Last location */
 	int lastX;
 	int lastY;
@@ -17,7 +17,6 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	boolean[][] state; //State contains the game map
 	
 	public Mover(int x, int y) { //Generic constructor
-		direction = 'L';
 		this.lastX = x;
 		this.lastY = y;
 		this.x = x;

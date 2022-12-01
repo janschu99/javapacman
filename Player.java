@@ -1,18 +1,14 @@
 class Player extends Mover { //This is the pacman object
 	
 	/* Direction (inherited from Mover) is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
-	char currDirection;
-	char desiredDirection;
-	int pelletsEaten; //Keeps track of pellets eaten to determine end of game
-	boolean teleport; //teleport is true when travelling through the teleport tunnels
+	char currDirection = 'L';
+	char desiredDirection = 'L';
+	int pelletsEaten = 0; //Keeps track of pellets eaten to determine end of game
+	boolean teleport = false; //teleport is true when travelling through the teleport tunnels
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	
 	public Player(int x, int y) { //Constructor places pacman in initial location and orientation
 		super(x, y);
-		teleport = false;
-		pelletsEaten = 0;
-		currDirection = 'L';
-		desiredDirection = 'L';
 	}
 	
 	public void demoMove() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
