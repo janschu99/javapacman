@@ -112,9 +112,10 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	}
 	
 	public boolean isValidDest(int x, int y) { //Determines if a set of coordinates is a valid destination.
-	/* The first statements check that the x and y are inbounds.  The last statement checks the map to
-	   see if it's a valid location */
-		return (x%Pacman.GRID_SIZE==0 || y%Pacman.GRID_SIZE==0) && Pacman.GRID_SIZE<=x && x<Pacman.MAX && Pacman.GRID_SIZE<=y && y<Pacman.MAX && state[x/Pacman.GRID_SIZE-1][y/Pacman.GRID_SIZE-1];
+		/* The first statements check that the x and y are inbounds.  The last statement checks the map to
+		   see if it's a valid location */
+		return (x%Pacman.GRID_SIZE==0 || y%Pacman.GRID_SIZE==0) && Pacman.GRID_SIZE<=x && x<Pacman.MAX
+				&& Pacman.GRID_SIZE<=y && y<Pacman.MAX && state[x/Pacman.GRID_SIZE-1][y/Pacman.GRID_SIZE-1];
 	}
 	
 	public boolean isChoiceDest() { //Determines if the location is one where the mover can make a decision
