@@ -1,9 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 import javax.swing.JPanel;
 
@@ -19,8 +16,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	   pacman is in the process of dying */
 	int dying = 0;
 	/* Score information */
-	int currScore = 0;
-	int highScore;
 	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
 	int numLives;
 	boolean[][] state; //Contains the game map
@@ -34,45 +29,17 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	int New = 0;
 	GameSounds sounds = new GameSounds(); //Used to call sound effects
 	GameImages images = new GameImages(); //Used to get the images to draw
+	ScoreManager scoreManager = new ScoreManager(); //Used to handle the current score and high scores
 	int lastPelletEatenX = 0;
 	int lastPelletEatenY = 0;
 	Font font = new Font("Monospaced", Font.BOLD, 12); //This is the font used for the menus
 	
 	public Board() { //Constructor initializes state flags etc.
-		initHighScores();
 		reset();
 	}
 	
-	public void initHighScores() { //Reads the high scores file and saves it
-		try {
-			File file = new File("highScores.txt");
-			Scanner sc = new Scanner(file);
-			highScore = sc.nextInt();
-			sc.close();
-		} catch (Exception ignored) {}
-	}
-	
-	public void updateScore(int score) { //Writes the new high score to a file and sets flag to update it on screen
-		try {
-			PrintWriter out = new PrintWriter("highScores.txt");
-			out.println(score);
-			out.close();
-		} catch (Exception ignored) {}
-		highScore = score;
-		clearHighScores = true;
-	}
-	
-	public void clearHighScores() { //Wipes the high scores file and sets flag to update it on screen
-		try {
-			PrintWriter out = new PrintWriter("highScores.txt");
-			out.println("0");
-			out.close();
-		} catch (Exception ignored) {}
-		highScore = 0;
-		clearHighScores = true;
-	}
-	
 	public void reset() { //Reset occurs on a new game
+		scoreManager.resetCurrentScore();
 		player = new Player(200, 300, this);
 		ghost1 = new Ghost(180, 180, this);
 		ghost2 = new Ghost(200, 180, this);
@@ -222,8 +189,8 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		g.setColor(Color.YELLOW);
 		g.setFont(font);
 		clearHighScores = false;
-		if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-		else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
+		if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+scoreManager.getHighScore(), 20, 10);
+		else g.drawString("Score: "+scoreManager.getCurrentScore()+"\t High Score: "+scoreManager.getHighScore(), 20, 10);
 	}
 	
 	@Override
@@ -251,7 +218,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 					if (numLives==-1) {
 						if (demo) numLives = 2; //Demo mode has infinite lives, just give it more lives
 						else { //Game over for player.  If relevant, update high score.  Set gameOver flag
-							if (currScore>highScore) updateScore(currScore);
+							if (scoreManager.checkHighScore()) clearHighScores = true;
 							overScreen = true;
 						}
 					}
@@ -286,7 +253,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		if (clearHighScores) drawTopBar(g); //If we need to update the high scores, redraw the top menu bar
 		if (New==1) { //Game initialization
 			reset();
-			currScore = 0;
 			drawTopBar(g);
 			drawBoard(g);
 			drawPellets(g);
@@ -344,11 +310,11 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			sounds.nomNom(); //Play eating sound
 			player.pelletsEaten++; //Increment pellets eaten value to track for end game
 			pellets[player.pelletX][player.pelletY] = false; //Delete the pellet
-			currScore += 50; //Increment the score
+			scoreManager.incrementCurrentScore(50); //Increment the score
 			drawTopBar(g); //Update the screen to reflect the new score
 			if (player.pelletsEaten==173) { //If this was the last pellet
 				if (!demo) { //Demo mode can't get a high score
-					if (currScore>highScore) updateScore(currScore);
+					if (scoreManager.checkHighScore()) clearHighScores = true;
 					winScreen = true;
 				} else titleScreen = true;
 				return;
