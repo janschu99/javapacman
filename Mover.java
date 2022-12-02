@@ -14,50 +14,47 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	int pelletX;
 	int pelletY;
 	int frameCount = 0; //frameCount is used to count animation frames
-	boolean[][] state; //State contains the game map
+	final Board board;
 	
-	public Mover(int x, int y) { //Generic constructor
+	public Mover(int x, int y, Board board) { //Generic constructor
 		this.lastX = x;
 		this.lastY = y;
 		this.x = x;
 		this.y = y;
 		pelletX = x/Pacman.GRID_SIZE-1;
 		pelletY = y/Pacman.GRID_SIZE-1;
-		state = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
-		for (int i = 0; i<Pacman.BOARD_SIZE; i++) {
-			for (int j = 0; j<Pacman.BOARD_SIZE; j++) {
-				state[i][j] = false;
-			}
-		}
+		this.board = board;
 	}
 	
-	public boolean doMove(char dir, boolean allowTeleport) { //Returns whether teleportation happened
+	public boolean doMove(char dir, boolean allowTeleport, boolean isPlayer) { //Returns whether teleportation happened
+	                                                                     //Player is not allowed to enter the ghost box
 		switch (dir) {
 			case 'L':
-				if (isValidDest(x-Pacman.INCREMENT, y)) x -= Pacman.INCREMENT;
+				if (board.isValidDest(x-Pacman.INCREMENT, y, isPlayer)) x -= Pacman.INCREMENT;
 				else if (allowTeleport && y==9*Pacman.GRID_SIZE && x<2*Pacman.GRID_SIZE) {
 					x = Pacman.MAX-Pacman.GRID_SIZE;
 					return true;
 				}
 				break;
 			case 'R':
-				if (isValidDest(x+Pacman.GRID_SIZE, y)) x += Pacman.INCREMENT;
+				if (board.isValidDest(x+Pacman.GRID_SIZE, y, isPlayer)) x += Pacman.INCREMENT;
 				else if (allowTeleport && y==9*Pacman.GRID_SIZE && x>Pacman.MAX-Pacman.GRID_SIZE*2) {
 					x = Pacman.GRID_SIZE;
 					return true;
 				}
 				break;
 			case 'U':
-				if (isValidDest(x, y-Pacman.INCREMENT)) y -= Pacman.INCREMENT;
+				if (board.isValidDest(x, y-Pacman.INCREMENT, isPlayer)) y -= Pacman.INCREMENT;
 				break;
 			case 'D':
-				if (isValidDest(x, y+Pacman.GRID_SIZE)) y += Pacman.INCREMENT;
+				if (board.isValidDest(x, y+Pacman.GRID_SIZE, isPlayer)) y += Pacman.INCREMENT;
 				break;
 		}
 		return false;
 	}
 	
-	public char newDirection() { //Chooses a new direction randomly for the mover to move
+	public char newDirection(boolean isPlayer) { //Chooses a new direction randomly for the mover to move
+	                                             //Player is not allowed to enter the ghost box
 		char backwards = 'U';
 		int lookX = x, lookY = y;
 		switch (direction) {
@@ -76,7 +73,7 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 		}
 		char newDirection = backwards;
 		Set<Character> set = new HashSet<>();
-		while (newDirection==backwards || !isValidDest(lookX, lookY)) { //While we still haven't found a valid direction
+		while (newDirection==backwards || !board.isValidDest(lookX, lookY, isPlayer)) { //While we still haven't found a valid direction
 			if (set.size()==3) { //If we've tried every location, turn around and break the loop
 				newDirection = backwards;
 				break;
@@ -101,21 +98,6 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 			if (newDirection!=backwards) set.add(newDirection);
 		}
 		return newDirection;
-	}
-	
-	public void updateState(boolean[][] state) { //Updates the state information
-		for (int i = 0; i<Pacman.BOARD_SIZE; i++) {
-			for (int j = 0; j<Pacman.BOARD_SIZE; j++) {
-				this.state[i][j] = state[i][j];
-			}
-		}
-	}
-	
-	public boolean isValidDest(int x, int y) { //Determines if a set of coordinates is a valid destination.
-		/* The first statements check that the x and y are inbounds.  The last statement checks the map to
-		   see if it's a valid location */
-		return (x%Pacman.GRID_SIZE==0 || y%Pacman.GRID_SIZE==0) && Pacman.GRID_SIZE<=x && x<Pacman.MAX
-				&& Pacman.GRID_SIZE<=y && y<Pacman.MAX && state[x/Pacman.GRID_SIZE-1][y/Pacman.GRID_SIZE-1];
 	}
 	
 	public boolean isChoiceDest() { //Determines if the location is one where the mover can make a decision

@@ -2,8 +2,8 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 	
 	int lastPelletX, lastPelletY; //The pellet the ghost was last on top of
 	
-	public Ghost(int x, int y) { //Constructor places ghost and updates states
-		super(x, y);
+	public Ghost(int x, int y, Board board) { //Constructor places ghost and updates states
+		super(x, y, board);
 		lastPelletX = pelletX;
 		lastPelletY = pelletY;
 	}
@@ -22,7 +22,7 @@ class Ghost extends Mover { //Ghost class controls the ghost.
 	public void move() { //Random move function for ghost
 		lastX = x;
 		lastY = y;
-		if (isChoiceDest()) direction = newDirection(); //If we can make a decision, pick a new direction randomly
-		doMove(direction, false); //If that direction is valid, move that way
+		if (isChoiceDest()) direction = newDirection(false); //If we can make a decision, pick a new direction randomly
+		doMove(direction, false, false); //If that direction is valid, move that way
 	}
 }

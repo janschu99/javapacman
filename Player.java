@@ -7,15 +7,15 @@ class Player extends Mover { //This is the pacman object
 	boolean teleport = false; //teleport is true when travelling through the teleport tunnels
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	
-	public Player(int x, int y) { //Constructor places pacman in initial location and orientation
-		super(x, y);
+	public Player(int x, int y, Board board) { //Constructor places pacman in initial location and orientation
+		super(x, y, board);
 	}
 	
 	public void demoMove() { //This function is used for demoMode.  It is copied from the Ghost class.  See that for comments
 		lastX = x;
 		lastY = y;
-		if (isChoiceDest()) direction = newDirection();
-		if (doMove(direction, true)) teleport = true;
+		if (isChoiceDest()) direction = newDirection(true);
+		if (doMove(direction, true, true)) teleport = true;
 		currDirection = direction;
 		frameCount++;
 	}
@@ -31,10 +31,10 @@ class Player extends Mover { //This is the pacman object
 				(desiredDirection=='R' && currDirection=='L') ||
 				(desiredDirection=='U' && currDirection=='D') ||
 				(desiredDirection=='D' && currDirection=='U')) {
-			doMove(desiredDirection, false);
+			doMove(desiredDirection, false, true);
 		}
 		if (lastX==x && lastY==y) { //If we haven't moved, then move in the direction the pacman was headed anyway
-			if (doMove(currDirection, true)) teleport = true;
+			if (doMove(currDirection, true, true)) teleport = true;
 		} else currDirection = desiredDirection; //If we did change direction, update currDirection to reflect that
 		if (lastX==x && lastY==y) stopped = true; //If we didn't move at all, set the stopped flag
 		else { //Otherwise, clear the stopped flag and increment the frameCount for animation purposes

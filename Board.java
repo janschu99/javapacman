@@ -28,11 +28,11 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	Image gameOverImage = Toolkit.getDefaultToolkit().getImage("img/gameOver.jpg");
 	Image winScreenImage = Toolkit.getDefaultToolkit().getImage("img/winScreen.jpg");
 	/* Initialize the player and ghosts */
-	Player player = new Player(200, 300);
-	Ghost ghost1 = new Ghost(180, 180);
-	Ghost ghost2 = new Ghost(200, 180);
-	Ghost ghost3 = new Ghost(220, 180);
-	Ghost ghost4 = new Ghost(220, 180);
+	Player player;
+	Ghost ghost1;
+	Ghost ghost2;
+	Ghost ghost3;
+	Ghost ghost4;
 	long timer = System.currentTimeMillis(); //Timer is used for playing sound effects and animations
 	/* Dying is used to count frames in the dying animation.  If it's non-zero,
 	   pacman is in the process of dying */
@@ -58,6 +58,11 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	
 	public Board() { //Constructor initializes state flags etc.
 		initHighScores();
+		player = new Player(200, 300, this);
+		ghost1 = new Ghost(180, 180, this);
+		ghost2 = new Ghost(200, 180, this);
+		ghost3 = new Ghost(220, 180, this);
+		ghost4 = new Ghost(220, 180, this);
 	}
 	
 	public void initHighScores() { //Reads the high scores file and saves it
@@ -123,6 +128,16 @@ public class Board extends JPanel { //This board class contains the player, ghos
 				pellets[i-1][j-1] = false;
 			}
 		}
+	}
+	
+	public boolean isValidDest(int x, int y, boolean isPlayer) { //Determines if a set of coordinates is a valid destination.
+	                                                             //Player is not allowed to enter the ghost box
+		/* The first statements check that the x and y are inbounds.  The last statement checks the map to
+		   see if it's a valid location */
+		if (x%Pacman.GRID_SIZE!=0 && y%Pacman.GRID_SIZE!=0) return false; //not on a walkable path
+		if (Pacman.GRID_SIZE>x || x>=Pacman.MAX || Pacman.GRID_SIZE>y || y>=Pacman.MAX) return false; //out of bounds
+		if (isPlayer && x/Pacman.GRID_SIZE-1==9 && y/Pacman.GRID_SIZE-1==7) return false;  //Don't let the player go in the ghost box
+		return state[x/Pacman.GRID_SIZE-1][y/Pacman.GRID_SIZE-1]; //valid location on the map
 	}
 	
 	/* Draws the appropriate number of lives on the bottom left of the screen.
@@ -333,21 +348,15 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		}
 		if (New==1) { //Game initialization
 			reset();
-			player = new Player(200, 300);
-			ghost1 = new Ghost(180, 180);
-			ghost2 = new Ghost(200, 180);
-			ghost3 = new Ghost(220, 180);
-			ghost4 = new Ghost(220, 180);
+			player = new Player(200, 300, this);
+			ghost1 = new Ghost(180, 180, this);
+			ghost2 = new Ghost(200, 180, this);
+			ghost3 = new Ghost(220, 180, this);
+			ghost4 = new Ghost(220, 180, this);
 			currScore = 0;
 			drawBoard(g);
 			drawPellets(g);
 			drawLives(g);
-			player.updateState(state); //Send the game map to player and all ghosts
-			player.state[9][7] = false; //Don't let the player go in the ghost box
-			ghost1.updateState(state);
-			ghost2.updateState(state);
-			ghost3.updateState(state);
-			ghost4.updateState(state);
 			/* Draw the top menu bar*/
 			g.setColor(Color.YELLOW);
 			g.setFont(font);
