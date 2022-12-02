@@ -165,12 +165,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	public void drawBoard(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 600, 600);
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 420, 420);
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 20, 600);
-		g.fillRect(0, 0, 600, 20);
 		g.setColor(Color.WHITE);
 		g.drawRect(19, 19, 382, 382);
 		g.setColor(Color.BLUE);
@@ -195,7 +189,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		updateMap(160, 180, 20, 20, g);
 		updateMap(160, 200, 100, 20, g);
 		updateMap(240, 180, 20, 20, g);
-		g.setColor(Color.BLUE);
 		
 		updateMap(120, 120, 60, 20, g);
 		updateMap(120, 80, 20, 100, g);
