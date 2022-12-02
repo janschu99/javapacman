@@ -19,6 +19,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	/* Score information */
 	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
 	int numLives;
+	int pelletsEaten; //Keeps track of pellets eaten to determine end of game
 	boolean[][] state; //Contains the game map
 	boolean[][] pellets; //Contains the state of all pellets
 	/* State flags*/
@@ -40,6 +41,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	}
 	
 	public void reset() { //Reset occurs on a new game
+		pelletsEaten = 0;
 		scoreManager.resetCurrentScore();
 		player = new Player(200, 300, this);
 		ghost1 = new Ghost(180, 180, this);
@@ -299,11 +301,11 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			lastPelletEatenX = player.pelletX;
 			lastPelletEatenY = player.pelletY;
 			sounds.nomNom(); //Play eating sound
-			player.pelletsEaten++; //Increment pellets eaten value to track for end game
+			pelletsEaten++; //Increment pellets eaten value to track for end game
 			pellets[player.pelletX][player.pelletY] = false; //Delete the pellet
 			scoreManager.incrementCurrentScore(50); //Increment the score
 			drawTopBar(g); //Update the screen to reflect the new score
-			if (player.pelletsEaten==173) { //If this was the last pellet
+			if (pelletsEaten==173) { //If this was the last pellet
 				if (!demo) { //Demo mode can't get a high score
 					if (scoreManager.checkHighScore()) clearHighScores = true;
 					winScreen = true;

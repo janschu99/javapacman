@@ -3,7 +3,6 @@ class Player extends Mover { //This is the pacman object
 	/* Direction (inherited from Mover) is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
 	char currDirection = 'L';
 	char desiredDirection = 'L';
-	int pelletsEaten = 0; //Keeps track of pellets eaten to determine end of game
 	boolean teleport = false; //teleport is true when travelling through the teleport tunnels
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	
