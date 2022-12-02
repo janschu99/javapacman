@@ -41,8 +41,8 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	int currScore = 0;
 	int highScore;
 	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
-	int numLives = 2;
-	boolean[][] state; //Contains the game map, passed to player and ghosts
+	int numLives;
+	boolean[][] state; //Contains the game map
 	boolean[][] pellets; //Contains the state of all pellets
 	/* State flags*/
 	boolean stopped = false;
@@ -58,11 +58,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	
 	public Board() { //Constructor initializes state flags etc.
 		initHighScores();
-		player = new Player(200, 300, this);
-		ghost1 = new Ghost(180, 180, this);
-		ghost2 = new Ghost(200, 180, this);
-		ghost3 = new Ghost(220, 180, this);
-		ghost4 = new Ghost(220, 180, this);
+		reset();
 	}
 	
 	public void initHighScores() { //Reads the high scores file and saves it
@@ -95,6 +91,11 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	}
 	
 	public void reset() { //Reset occurs on a new game
+		player = new Player(200, 300, this);
+		ghost1 = new Ghost(180, 180, this);
+		ghost2 = new Ghost(200, 180, this);
+		ghost3 = new Ghost(220, 180, this);
+		ghost4 = new Ghost(220, 180, this);
 		numLives = 2;
 		state = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
 		pellets = new boolean[Pacman.BOARD_SIZE][Pacman.BOARD_SIZE];
@@ -348,11 +349,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		}
 		if (New==1) { //Game initialization
 			reset();
-			player = new Player(200, 300, this);
-			ghost1 = new Ghost(180, 180, this);
-			ghost2 = new Ghost(200, 180, this);
-			ghost3 = new Ghost(220, 180, this);
-			ghost4 = new Ghost(220, 180, this);
 			currScore = 0;
 			drawBoard(g);
 			drawPellets(g);
