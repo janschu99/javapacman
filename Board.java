@@ -32,7 +32,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	boolean winScreen = false;
 	boolean overScreen = false;
 	boolean demo = false;
-	int New = 0;
+	int New = 1; //New game when this board is created
 	GameSounds sounds = new GameSounds(); //Used to call sound effects
 	GameImages images = new GameImages(); //Used to get the images to draw
 	ScoreManager scoreManager = new ScoreManager(); //Used to handle the current score and high scores

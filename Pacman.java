@@ -29,7 +29,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		b.addKeyListener(this);
 		f.setVisible(true); //Make frame visible
 		f.setResizable(false); //Disable resizing
-		b.New = 1; //Set the New flag to 1 because this is a new game
 		frameTimer = new Timer(30, e -> b.stepFrame(false, frameTimer)); //Create a timer that calls stepFrame every 30 milliseconds
 		b.stepFrame(true, frameTimer); //Manually call the first frameStep to initialize the game.
 		frameTimer.start(); //Start the timer
