@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Board extends JPanel { //This board class contains the player, ghosts, pellets, and most of the game logic.
 	/* Initialize the player and ghosts */
@@ -18,6 +19,9 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	int dying = 0;
 	/* Score information */
 	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
+	/* These timers are used to kill title, game over, and victory screens after a set idle period (5 seconds)*/
+	long titleTimer = -1;
+	long screenTimer = -1;
 	int numLives;
 	int pelletsEaten; //Keeps track of pellets eaten to determine end of game
 	boolean[][] state; //Contains the game map
@@ -346,5 +350,97 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		/* Draw the border around the game in case it was overwritten by ghost movement or something */
 		g.setColor(Color.WHITE);
 		g.drawRect(19, 19, 382, 382);
+	}
+	
+	public void stepFrame(boolean firstCall, Timer frameTimer) { //Steps the screen forward one frame
+		if (!titleScreen && !winScreen && !overScreen) { //If we aren't on a special screen than the timers can be set to -1 to disable them
+			screenTimer = -1;
+			titleTimer = -1;
+		}
+		if (dying>0) { //If we are playing the dying animation, keep advancing frames until the animation is complete
+			repaint();
+			return;
+		}
+		firstCall = firstCall || New!=0;
+		/* If this is the title screen, make sure to only stay on the title screen for 5 seconds.
+		   If after 5 seconds the user hasn't started a game, start up demo mode */
+		if (titleScreen) {
+			if (titleTimer==-1) titleTimer = System.currentTimeMillis();
+			long currTime = System.currentTimeMillis();
+			if (currTime-titleTimer>=5000) {
+				titleScreen = false;
+				demo = true;
+				titleTimer = -1;
+			}
+			repaint();
+			return;
+		}
+		/* If this is the win screen or game over screen, make sure to only stay on the screen for 5 seconds.
+		   If after 5 seconds the user hasn't pressed a key, go to title screen */
+		if (winScreen || overScreen) {
+			if (screenTimer==-1) screenTimer = System.currentTimeMillis();
+			long currTime = System.currentTimeMillis();
+			if (currTime-screenTimer>=5000) {
+				winScreen = false;
+				overScreen = false;
+				titleScreen = true;
+				screenTimer = -1;
+			}
+			repaint();
+			return;
+		}
+		if (!firstCall) { //If we have a normal game state, move all pieces and update pellet status
+			/* The pacman player has two functions, demoMove if we're in demo mode and move if we're in
+			   user playable mode.  Call the appropriate one here */
+			if (demo) player.demoMove();
+			else player.move();
+			/* Also move the ghosts, and update the pellet states */
+			ghost1.move();
+			ghost2.move();
+			ghost3.move();
+			ghost4.move();
+			player.updatePellet();
+			ghost1.updatePellet();
+			ghost2.updatePellet();
+			ghost3.updatePellet();
+			ghost4.updatePellet();
+		}
+		if (stopped || firstCall) { //We either have a new game or the user has died, either way we have to reset the board
+			frameTimer.stop(); //Temporarily stop advancing frames
+			while (dying>0) stepFrame(false, frameTimer); //If user is dying, play dying animation
+			/* Move all game elements back to starting positions and orientations */
+			player.currDirection = 'L';
+			player.direction = 'L';
+			player.desiredDirection = 'L';
+			player.x = 200;
+			player.y = 300;
+			ghost1.x = 180;
+			ghost1.y = 180;
+			ghost2.x = 200;
+			ghost2.y = 180;
+			ghost3.x = 220;
+			ghost3.y = 180;
+			ghost4.x = 220;
+			ghost4.y = 180;
+			repaint(0, 0, 600, 600); //Advance a frame to display main state
+			/*Start advancing frames once again*/
+			stopped = false;
+			frameTimer.start();
+		} else { //Otherwise we're in a normal state, advance one frame
+			/* This repaint function repaints only the parts of the screen that may have changed,
+			   namely the area around every player ghost and the menu bars
+			*/
+			if (player.teleport) {
+				repaint(player.lastX-20, player.lastY-20, 80, 80);
+				player.teleport = false;
+			}
+			repaint(0, 0, 600, 20);
+			repaint(0, 420, 600, 40);
+			repaint(player.x-20, player.y-20, 80, 80);
+			repaint(ghost1.x-20, ghost1.y-20, 80, 80);
+			repaint(ghost2.x-20, ghost2.y-20, 80, 80);
+			repaint(ghost3.x-20, ghost3.y-20, 80, 80);
+			repaint(ghost4.x-20, ghost4.y-20, 80, 80);
+		}
 	}
 }

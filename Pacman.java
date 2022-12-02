@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JApplet;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 /* This class contains the entire game... most of the game logic is in the Board class but this
    creates the gui and captures mouse and keyboard input, as well as controls the game states */
@@ -16,11 +17,8 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	public static final int INCREMENT = 4; //INCREMENT is the speed at which the object moves, 1 INCREMENT per move() call
 	public static final int BOARD_SIZE = 20;
 	
-	/* These timers are used to kill title, game over, and victory screens after a set idle period (5 seconds)*/
-	long titleTimer = -1;
-	long timer = -1;
 	Board b = new Board(); //Create a new board
-	javax.swing.Timer frameTimer; //This timer is used to do request new frames be drawn
+	Timer frameTimer; //This timer is used to do request new frames be drawn
 	
 	public Pacman() { //This constructor creates the entire game essentially
 		b.requestFocus();
@@ -32,105 +30,10 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		f.setVisible(true); //Make frame visible
 		f.setResizable(false); //Disable resizing
 		b.New = 1; //Set the New flag to 1 because this is a new game
-		stepFrame(true); //Manually call the first frameStep to initialize the game.
-		frameTimer = new javax.swing.Timer(30, e -> stepFrame(false)); //Create a timer that calls stepFrame every 30 milliseconds
+		frameTimer = new Timer(30, e -> b.stepFrame(false, frameTimer)); //Create a timer that calls stepFrame every 30 milliseconds
+		b.stepFrame(true, frameTimer); //Manually call the first frameStep to initialize the game.
 		frameTimer.start(); //Start the timer
 		b.requestFocus();
-	}
-	
-	public void stepFrame(boolean New) { //Steps the screen forward one frame
-		if (!b.titleScreen && !b.winScreen && !b.overScreen) { //If we aren't on a special screen than the timers can be set to -1 to disable them
-			timer = -1;
-			titleTimer = -1;
-		}
-		if (b.dying>0) { //If we are playing the dying animation, keep advancing frames until the animation is complete
-			b.repaint();
-			return;
-		}
-		/* New can either be specified by the New parameter in stepFrame function call or by the state
-		   of b.New.  Update New accordingly */
-		New = New || b.New!=0;
-		/* If this is the title screen, make sure to only stay on the title screen for 5 seconds.
-		   If after 5 seconds the user hasn't started a game, start up demo mode */
-		if (b.titleScreen) {
-			if (titleTimer==-1) titleTimer = System.currentTimeMillis();
-			long currTime = System.currentTimeMillis();
-			if (currTime-titleTimer>=5000) {
-				b.titleScreen = false;
-				b.demo = true;
-				titleTimer = -1;
-			}
-			b.repaint();
-			return;
-		}
-		/* If this is the win screen or game over screen, make sure to only stay on the screen for 5 seconds.
-		   If after 5 seconds the user hasn't pressed a key, go to title screen */
-		if (b.winScreen || b.overScreen) {
-			if (timer==-1) timer = System.currentTimeMillis();
-			long currTime = System.currentTimeMillis();
-			if (currTime-timer>=5000) {
-				b.winScreen = false;
-				b.overScreen = false;
-				b.titleScreen = true;
-				timer = -1;
-			}
-			b.repaint();
-			return;
-		}
-		if (!New) { //If we have a normal game state, move all pieces and update pellet status
-			/* The pacman player has two functions, demoMove if we're in demo mode and move if we're in
-			   user playable mode.  Call the appropriate one here */
-			if (b.demo) b.player.demoMove();
-			else b.player.move();
-			/* Also move the ghosts, and update the pellet states */
-			b.ghost1.move();
-			b.ghost2.move();
-			b.ghost3.move();
-			b.ghost4.move();
-			b.player.updatePellet();
-			b.ghost1.updatePellet();
-			b.ghost2.updatePellet();
-			b.ghost3.updatePellet();
-			b.ghost4.updatePellet();
-		}
-		if (b.stopped || New) { //We either have a new game or the user has died, either way we have to reset the board
-			frameTimer.stop(); //Temporarily stop advancing frames
-			while (b.dying>0) //If user is dying ...
-				stepFrame(false); //Play dying animation.
-			/* Move all game elements back to starting positions and orientations */
-			b.player.currDirection = 'L';
-			b.player.direction = 'L';
-			b.player.desiredDirection = 'L';
-			b.player.x = 200;
-			b.player.y = 300;
-			b.ghost1.x = 180;
-			b.ghost1.y = 180;
-			b.ghost2.x = 200;
-			b.ghost2.y = 180;
-			b.ghost3.x = 220;
-			b.ghost3.y = 180;
-			b.ghost4.x = 220;
-			b.ghost4.y = 180;
-			b.repaint(0, 0, 600, 600); //Advance a frame to display main state
-			/*Start advancing frames once again*/
-			b.stopped = false;
-			frameTimer.start();
-		} else { //Otherwise we're in a normal state, advance one frame
-			/* This repaint function repaints only the parts of the screen that may have changed,
-			   namely the area around every player ghost and the menu bars
-			*/
-			if (b.player.teleport) {
-				b.repaint(b.player.lastX-20, b.player.lastY-20, 80, 80);
-				b.player.teleport = false;
-			}
-			b.repaint(0, 0, 600, 20);
-			b.repaint(0, 420, 600, 40);
-			b.repaint(b.player.x-20, b.player.y-20, 80, 80);
-			b.repaint(b.ghost1.x-20, b.ghost1.y-20, 80, 80);
-			b.repaint(b.ghost2.x-20, b.ghost2.y-20, 80, 80);
-			b.repaint(b.ghost3.x-20, b.ghost3.y-20, 80, 80);
-			b.repaint(b.ghost4.x-20, b.ghost4.y-20, 80, 80);
-		}
 	}
 	
 	@Override
