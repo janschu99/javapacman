@@ -14,7 +14,7 @@ class Mover { //Both Player and Ghost inherit Mover.  Has generic functions rele
 	int pelletX;
 	int pelletY;
 	int frameCount = 0; //frameCount is used to count animation frames
-	final Board board;
+	private final Board board;
 	
 	public Mover(int x, int y, Board board) { //Generic constructor
 		this.lastX = x;

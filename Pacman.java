@@ -17,8 +17,8 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	public static final int INCREMENT = 4; //INCREMENT is the speed at which the object moves, 1 INCREMENT per move() call
 	public static final int BOARD_SIZE = 20;
 	
-	Board b = new Board(); //Create a new board
-	Timer frameTimer; //This timer is used to do request new frames be drawn
+	private final Board b = new Board(); //Create a new board
+	private Timer frameTimer; //This timer is used to do request new frames be drawn
 	
 	public Pacman() { //This constructor creates the entire game essentially
 		b.requestFocus();

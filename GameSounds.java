@@ -6,9 +6,9 @@ import javax.sound.sampled.Clip;
 
 public class GameSounds { //This class controls all sound effects
 	
-	Clip nomNom;
-	Clip newGame;
-	Clip death;
+	private Clip nomNom;
+	private Clip newGame;
+	private Clip death;
 	boolean stopped = true; //Keeps track of whether the eating sound is playing
 	
 	public GameSounds() { //Initialize audio files

@@ -9,37 +9,37 @@ import javax.swing.Timer;
 
 public class Board extends JPanel { //This board class contains the player, ghosts, pellets, and most of the game logic.
 	/* Initialize the player and ghosts */
-	Player player;
-	Ghost ghost1;
-	Ghost ghost2;
-	Ghost ghost3;
-	Ghost ghost4;
-	long timer = System.currentTimeMillis(); //Timer is used for playing sound effects and animations
+	private Player player;
+	private Ghost ghost1;
+	private Ghost ghost2;
+	private Ghost ghost3;
+	private Ghost ghost4;
+	private long timer = System.currentTimeMillis(); //Timer is used for playing sound effects and animations
 	/* Dying is used to count frames in the dying animation.  If it's non-zero,
 	   pacman is in the process of dying */
-	int dying = 0;
+	private int dying = 0;
 	/* Score information */
-	boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
+	private boolean clearHighScores = false; //if the high scores have been cleared, we have to update the top of the screen to reflect that
 	/* These timers are used to kill title, game over, and victory screens after a set idle period (5 seconds)*/
-	long titleTimer = -1;
-	long screenTimer = -1;
-	int numLives;
-	int pelletsEaten; //Keeps track of pellets eaten to determine end of game
-	boolean[][] state; //Contains the game map
-	boolean[][] pellets; //Contains the state of all pellets
+	private long titleTimer = -1;
+	private long screenTimer = -1;
+	private int numLives;
+	private int lastPelletEatenX = 0;
+	private int lastPelletEatenY = 0;
+	private int pelletsEaten; //Keeps track of pellets eaten to determine end of game
+	private boolean[][] state; //Contains the game map
+	private boolean[][] pellets; //Contains the state of all pellets
 	/* State flags*/
-	boolean stopped = false;
-	boolean titleScreen = true;
-	boolean winScreen = false;
-	boolean overScreen = false;
-	boolean demo = false;
-	int New = 1; //New game when this board is created
-	GameSounds sounds = new GameSounds(); //Used to call sound effects
-	GameImages images = new GameImages(); //Used to get the images to draw
-	ScoreManager scoreManager = new ScoreManager(); //Used to handle the current score and high scores
-	int lastPelletEatenX = 0;
-	int lastPelletEatenY = 0;
-	Font font = new Font("Monospaced", Font.BOLD, 12); //This is the font used for the menus
+	private boolean stopped = false;
+	private boolean titleScreen = true;
+	private boolean winScreen = false;
+	private boolean overScreen = false;
+	private boolean demo = false;
+	private int New = 1; //New game when this board is created
+	private final GameSounds sounds = new GameSounds(); //Used to call sound effects
+	private final GameImages images = new GameImages(); //Used to get the images to draw
+	private final ScoreManager scoreManager = new ScoreManager(); //Used to handle the current score and high scores
+	private final Font font = new Font("Monospaced", Font.BOLD, 12); //This is the font used for the menus
 	
 	public Board() { //Constructor initializes state flags etc.
 		reset();
