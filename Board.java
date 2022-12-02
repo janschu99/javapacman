@@ -234,6 +234,16 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		g.fillOval(x*20+28, y*20+28, 4, 4);
 	}
 	
+	public void drawTopBar(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, 600, 18);
+		g.setColor(Color.YELLOW);
+		g.setFont(font);
+		clearHighScores = false;
+		if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
+		else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
+	}
+	
 	@Override
 	public void paint(Graphics g) { //This is the main function that draws one entire frame of the game
 		if (dying>0) { //If we're playing the dying animation, don't update the entire screen. Just kill the pacman
@@ -291,26 +301,14 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			return;
 		}
-		if (clearHighScores) { //If we need to update the high scores, redraw the top menu bar
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 600, 18);
-			g.setColor(Color.YELLOW);
-			g.setFont(font);
-			clearHighScores = false;
-			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
-		}
+		if (clearHighScores) drawTopBar(g); //If we need to update the high scores, redraw the top menu bar
 		if (New==1) { //Game initialization
 			reset();
 			currScore = 0;
+			drawTopBar(g);
 			drawBoard(g);
 			drawPellets(g);
 			drawLives(g);
-			/* Draw the top menu bar*/
-			g.setColor(Color.YELLOW);
-			g.setFont(font);
-			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
 			New++;
 		} else if (New==2) New++; //Second frame of new game
 		else if (New==3) { //Third frame of new game
@@ -365,13 +363,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			player.pelletsEaten++; //Increment pellets eaten value to track for end game
 			pellets[player.pelletX][player.pelletY] = false; //Delete the pellet
 			currScore += 50; //Increment the score
-			/* Update the screen to reflect the new score */
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 600, 20);
-			g.setColor(Color.YELLOW);
-			g.setFont(font);
-			if (demo) g.drawString("DEMO MODE PRESS ANY KEY TO START A GAME\t High Score: "+highScore, 20, 10);
-			else g.drawString("Score: "+currScore+"\t High Score: "+highScore, 20, 10);
+			drawTopBar(g); //Update the screen to reflect the new score
 			if (player.pelletsEaten==173) { //If this was the last pellet
 				if (!demo) { //Demo mode can't get a high score
 					if (currScore>highScore) updateScore(currScore);
