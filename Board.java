@@ -270,12 +270,6 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			if (currTime-timer>=5000) New = 0;
 			else return;
 		}
-		/* Drawing optimization */
-		g.copyArea(player.x-20, player.y-20, 80, 80, 0, 0);
-		g.copyArea(ghost1.x-20, ghost1.y-20, 80, 80, 0, 0);
-		g.copyArea(ghost2.x-20, ghost2.y-20, 80, 80, 0, 0);
-		g.copyArea(ghost3.x-20, ghost3.y-20, 80, 80, 0, 0);
-		g.copyArea(ghost4.x-20, ghost4.y-20, 80, 80, 0, 0);
 		/* Detect collisions */
 		boolean oops = false; //oops is set to true when pacman has lost a life
 		if (player.x==ghost1.x && Math.abs(player.y-ghost1.y)<10) oops = true;
