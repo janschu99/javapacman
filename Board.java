@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -441,6 +442,53 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			repaint(ghost2.x-20, ghost2.y-20, 80, 80);
 			repaint(ghost3.x-20, ghost3.y-20, 80, 80);
 			repaint(ghost4.x-20, ghost4.y-20, 80, 80);
+		}
+	}
+	
+	public void handleKeyboardKey(int keyCode) {
+		if (titleScreen) { //Pressing a key in the title screen starts a game
+			titleScreen = false;
+			return;
+		}
+		if (winScreen || overScreen) { //Pressing a key in the win screen or game over screen goes to the title screen
+			titleScreen = true;
+			winScreen = false;
+			overScreen = false;
+			return;
+		}
+		if (demo) { //Pressing a key during a demo kills the demo mode and starts a new game
+			demo = false;
+			sounds.nomNomStop(); //Stop any pacman eating sounds
+			New = 1;
+			return;
+		}
+		switch (keyCode) { //Otherwise, key presses control the player!
+			case KeyEvent.VK_LEFT:
+				player.desiredDirection = 'L';
+				break;
+			case KeyEvent.VK_RIGHT:
+				player.desiredDirection = 'R';
+				break;
+			case KeyEvent.VK_UP:
+				player.desiredDirection = 'U';
+				break;
+			case KeyEvent.VK_DOWN:
+				player.desiredDirection = 'D';
+				break;
+		}
+		repaint();
+	}
+	
+	public void handleMouseClick(int x, int y) {
+		if (titleScreen || winScreen || overScreen) //If we aren't in the game where a menu is showing, ignore clicks
+			return;
+		if (400<=y && y<=460) {
+			if (100<=x && x<=150) New = 1; //New game has been clicked
+			else if (180<=x && x<=300) { //Clear high scores has been clicked
+				scoreManager.clearHighScores();
+				clearHighScores = true;
+			}
+			else if (350<=x && x<=420) System.exit(0); //Exit has been clicked
 		}
 	}
 }

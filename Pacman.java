@@ -37,54 +37,12 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) { //Handles user key presses
-		if (b.titleScreen) { //Pressing a key in the title screen starts a game
-			b.titleScreen = false;
-			return;
-		}
-		if (b.winScreen || b.overScreen) { //Pressing a key in the win screen or game over screen goes to the title screen
-			b.titleScreen = true;
-			b.winScreen = false;
-			b.overScreen = false;
-			return;
-		}
-		if (b.demo) { //Pressing a key during a demo kills the demo mode and starts a new game
-			b.demo = false;
-			b.sounds.nomNomStop(); //Stop any pacman eating sounds
-			b.New = 1;
-			return;
-		}
-		switch (e.getKeyCode()) { //Otherwise, key presses control the player!
-			case KeyEvent.VK_LEFT:
-				b.player.desiredDirection = 'L';
-				break;
-			case KeyEvent.VK_RIGHT:
-				b.player.desiredDirection = 'R';
-				break;
-			case KeyEvent.VK_UP:
-				b.player.desiredDirection = 'U';
-				break;
-			case KeyEvent.VK_DOWN:
-				b.player.desiredDirection = 'D';
-				break;
-		}
-		repaint();
+		b.handleKeyboardKey(e.getKeyCode());
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) { //This function detects user clicks on the menu items at the bottom of the screen
-		if (b.titleScreen || b.winScreen || b.overScreen) //If we aren't in the game where a menu is showing, ignore clicks
-			return;
-		/* Get coordinates of click */
-		int x = e.getX();
-		int y = e.getY();
-		if (400<=y && y<=460) {
-			if (100<=x && x<=150) b.New = 1; //New game has been clicked
-			else if (180<=x && x<=300) { //Clear high scores has been clicked
-				b.scoreManager.clearHighScores();
-				b.clearHighScores = true;
-			}
-			else if (350<=x && x<=420) System.exit(0); //Exit has been clicked
-		}
+		b.handleMouseClick(e.getX(), e.getY());
 	}
 	
 	@Override
