@@ -38,24 +38,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		b.requestFocus();
 	}
 	
-	/* This repaint function repaints only the parts of the screen that may have changed,
-	   namely the area around every player ghost and the menu bars
-	*/
-	@Override
-	public void repaint() {
-		if (b.player.teleport) {
-			b.repaint(b.player.lastX-20, b.player.lastY-20, 80, 80);
-			b.player.teleport = false;
-		}
-		b.repaint(0, 0, 600, 20);
-		b.repaint(0, 420, 600, 40);
-		b.repaint(b.player.x-20, b.player.y-20, 80, 80);
-		b.repaint(b.ghost1.x-20, b.ghost1.y-20, 80, 80);
-		b.repaint(b.ghost2.x-20, b.ghost2.y-20, 80, 80);
-		b.repaint(b.ghost3.x-20, b.ghost3.y-20, 80, 80);
-		b.repaint(b.ghost4.x-20, b.ghost4.y-20, 80, 80);
-	}
-	
 	public void stepFrame(boolean New) { //Steps the screen forward one frame
 		if (!b.titleScreen && !b.winScreen && !b.overScreen) { //If we aren't on a special screen than the timers can be set to -1 to disable them
 			timer = -1;
@@ -133,7 +115,22 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 			/*Start advancing frames once again*/
 			b.stopped = false;
 			frameTimer.start();
-		} else repaint(); //Otherwise we're in a normal state, advance one frame
+		} else { //Otherwise we're in a normal state, advance one frame
+			/* This repaint function repaints only the parts of the screen that may have changed,
+			   namely the area around every player ghost and the menu bars
+			*/
+			if (b.player.teleport) {
+				b.repaint(b.player.lastX-20, b.player.lastY-20, 80, 80);
+				b.player.teleport = false;
+			}
+			b.repaint(0, 0, 600, 20);
+			b.repaint(0, 420, 600, 40);
+			b.repaint(b.player.x-20, b.player.y-20, 80, 80);
+			b.repaint(b.ghost1.x-20, b.ghost1.y-20, 80, 80);
+			b.repaint(b.ghost2.x-20, b.ghost2.y-20, 80, 80);
+			b.repaint(b.ghost3.x-20, b.ghost3.y-20, 80, 80);
+			b.repaint(b.ghost4.x-20, b.ghost4.y-20, 80, 80);
+		}
 	}
 	
 	@Override
