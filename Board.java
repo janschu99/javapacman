@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.JPanel;
 
@@ -193,6 +194,14 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		else g.drawString("Score: "+scoreManager.getCurrentScore()+"\t High Score: "+scoreManager.getHighScore(), 20, 10);
 	}
 	
+	public void drawScreen(Image image, Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, 600, 600);
+		g.drawImage(image, 0, 0, Color.BLACK, null);
+		sounds.nomNomStop(); //Stop any pacman eating sounds
+		New = 1;
+	}
+	
 	@Override
 	public void paint(Graphics g) { //This is the main function that draws one entire frame of the game
 		if (dying>0) { //If we're playing the dying animation, don't update the entire screen. Just kill the pacman
@@ -227,27 +236,15 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			return;
 		}
 		if (titleScreen) { //If this is the title screen, draw the title screen and return
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 600, 600);
-			g.drawImage(images.getTitleScreenImage(), 0, 0, Color.BLACK, null);
-			sounds.nomNomStop(); //Stop any pacman eating sounds
-			New = 1;
+			drawScreen(images.getTitleScreenImage(), g);
 			return;
 		}
 		if (winScreen) { //If this is the win screen, draw the win screen and return
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 600, 600);
-			g.drawImage(images.getWinScreenImage(), 0, 0, Color.BLACK, null);
-			New = 1;
-			sounds.nomNomStop(); //Stop any pacman eating sounds
+			drawScreen(images.getWinScreenImage(), g);
 			return;
 		}
 		if (overScreen) { //If this is the game over screen, draw the game over screen and return
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 600, 600);
-			g.drawImage(images.getGameOverImage(), 0, 0, Color.BLACK, null);
-			New = 1;
-			sounds.nomNomStop(); //Stop any pacman eating sounds
+			drawScreen(images.getGameOverImage(), g);
 			return;
 		}
 		if (clearHighScores) drawTopBar(g); //If we need to update the high scores, redraw the top menu bar
