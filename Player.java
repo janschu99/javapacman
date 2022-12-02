@@ -25,7 +25,7 @@ class Player extends Mover { //This is the pacman object
 		lastY = y;
 		/* Try to turn in the direction input by the user */
 		/*Can only turn if we're in center of a grid*/
-		if (x%Pacman.GRID_SIZE==0 && y%Pacman.GRID_SIZE==0 ||
+		if (isChoiceDest() ||
 				/* Or if we're reversing*/
 				(desiredDirection=='L' && currDirection=='R') ||
 				(desiredDirection=='R' && currDirection=='L') ||
@@ -44,7 +44,7 @@ class Player extends Mover { //This is the pacman object
 	}
 	
 	public void updatePellet() { //Update what pellet the pacman is on top of
-		if (x%Pacman.GRID_SIZE==0 && y%Pacman.GRID_SIZE==0) {
+		if (isChoiceDest()) {
 			pelletX = x/Pacman.GRID_SIZE-1;
 			pelletY = y/Pacman.GRID_SIZE-1;
 		}
