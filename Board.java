@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -10,23 +8,6 @@ import java.util.Scanner;
 import javax.swing.JPanel;
 
 public class Board extends JPanel { //This board class contains the player, ghosts, pellets, and most of the game logic.
-	/* Initialize the images*/
-	Image pacmanImage = Toolkit.getDefaultToolkit().getImage("img/pacman.jpg");
-	Image pacmanUpImage = Toolkit.getDefaultToolkit().getImage("img/pacmanup.jpg");
-	Image pacmanDownImage = Toolkit.getDefaultToolkit().getImage("img/pacmandown.jpg");
-	Image pacmanLeftImage = Toolkit.getDefaultToolkit().getImage("img/pacmanleft.jpg");
-	Image pacmanRightImage = Toolkit.getDefaultToolkit().getImage("img/pacmanright.jpg");
-	Image ghost10 = Toolkit.getDefaultToolkit().getImage("img/ghost10.jpg");
-	Image ghost20 = Toolkit.getDefaultToolkit().getImage("img/ghost20.jpg");
-	Image ghost30 = Toolkit.getDefaultToolkit().getImage("img/ghost30.jpg");
-	Image ghost40 = Toolkit.getDefaultToolkit().getImage("img/ghost40.jpg");
-	Image ghost11 = Toolkit.getDefaultToolkit().getImage("img/ghost11.jpg");
-	Image ghost21 = Toolkit.getDefaultToolkit().getImage("img/ghost21.jpg");
-	Image ghost31 = Toolkit.getDefaultToolkit().getImage("img/ghost31.jpg");
-	Image ghost41 = Toolkit.getDefaultToolkit().getImage("img/ghost41.jpg");
-	Image titleScreenImage = Toolkit.getDefaultToolkit().getImage("img/titleScreen.jpg");
-	Image gameOverImage = Toolkit.getDefaultToolkit().getImage("img/gameOver.jpg");
-	Image winScreenImage = Toolkit.getDefaultToolkit().getImage("img/winScreen.jpg");
 	/* Initialize the player and ghosts */
 	Player player;
 	Ghost ghost1;
@@ -52,6 +33,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	boolean demo = false;
 	int New = 0;
 	GameSounds sounds = new GameSounds(); //Used to call sound effects
+	GameImages images = new GameImages(); //Used to get the images to draw
 	int lastPelletEatenX = 0;
 	int lastPelletEatenY = 0;
 	Font font = new Font("Monospaced", Font.BOLD, 12); //This is the font used for the menus
@@ -248,7 +230,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 	public void paint(Graphics g) { //This is the main function that draws one entire frame of the game
 		if (dying>0) { //If we're playing the dying animation, don't update the entire screen. Just kill the pacman
 			sounds.nomNomStop(); //Stop any pacman eating sounds
-			g.drawImage(pacmanImage, player.x, player.y, Color.BLACK, null); //Draw the pacman
+			g.drawImage(images.getPacmanImage(), player.x, player.y, Color.BLACK, null); //Draw the pacman
 			g.setColor(Color.BLACK);
 			/* Kill the pacman */
 			if (dying==4) g.fillRect(player.x, player.y, 20, 7);
@@ -280,7 +262,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		if (titleScreen) { //If this is the title screen, draw the title screen and return
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 600);
-			g.drawImage(titleScreenImage, 0, 0, Color.BLACK, null);
+			g.drawImage(images.getTitleScreenImage(), 0, 0, Color.BLACK, null);
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			New = 1;
 			return;
@@ -288,7 +270,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		if (winScreen) { //If this is the win screen, draw the win screen and return
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 600);
-			g.drawImage(winScreenImage, 0, 0, Color.BLACK, null);
+			g.drawImage(images.getWinScreenImage(), 0, 0, Color.BLACK, null);
 			New = 1;
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			return;
@@ -296,7 +278,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		if (overScreen) { //If this is the game over screen, draw the game over screen and return
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 600, 600);
-			g.drawImage(gameOverImage, 0, 0, Color.BLACK, null);
+			g.drawImage(images.getGameOverImage(), 0, 0, Color.BLACK, null);
 			New = 1;
 			sounds.nomNomStop(); //Stop any pacman eating sounds
 			return;
@@ -382,38 +364,25 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		if (pellets[ghost4.lastPelletX][ghost4.lastPelletY]) fillPellet(ghost4.lastPelletX, ghost4.lastPelletY, g);
 		/*Draw the ghosts */
 		if (ghost1.frameCount<5) { //Draw first frame of ghosts
-			g.drawImage(ghost10, ghost1.x, ghost1.y, Color.BLACK, null);
-			g.drawImage(ghost20, ghost2.x, ghost2.y, Color.BLACK, null);
-			g.drawImage(ghost30, ghost3.x, ghost3.y, Color.BLACK, null);
-			g.drawImage(ghost40, ghost4.x, ghost4.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(1, false), ghost1.x, ghost1.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(2, false), ghost2.x, ghost2.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(3, false), ghost3.x, ghost3.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(4, false), ghost4.x, ghost4.y, Color.BLACK, null);
 			ghost1.frameCount++;
 		} else { //Draw second frame of ghosts
-			g.drawImage(ghost11, ghost1.x, ghost1.y, Color.BLACK, null);
-			g.drawImage(ghost21, ghost2.x, ghost2.y, Color.BLACK, null);
-			g.drawImage(ghost31, ghost3.x, ghost3.y, Color.BLACK, null);
-			g.drawImage(ghost41, ghost4.x, ghost4.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(1, true), ghost1.x, ghost1.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(2, true), ghost2.x, ghost2.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(3, true), ghost3.x, ghost3.y, Color.BLACK, null);
+			g.drawImage(images.getGhostImage(4, true), ghost4.x, ghost4.y, Color.BLACK, null);
 			if (ghost1.frameCount>=10) ghost1.frameCount = 0;
 			else ghost1.frameCount++;
 		}
 		/* Draw the pacman */
 		if (player.frameCount<5) { //Draw mouth closed
-			g.drawImage(pacmanImage, player.x, player.y, Color.BLACK, null);
+			g.drawImage(images.getPacmanImage(), player.x, player.y, Color.BLACK, null);
 		} else { //Draw mouth open in appropriate direction
 			if (player.frameCount>=10) player.frameCount = 0;
-			switch (player.currDirection) {
-				case 'L':
-					g.drawImage(pacmanLeftImage, player.x, player.y, Color.BLACK, null);
-					break;
-				case 'R':
-					g.drawImage(pacmanRightImage, player.x, player.y, Color.BLACK, null);
-					break;
-				case 'U':
-					g.drawImage(pacmanUpImage, player.x, player.y, Color.BLACK, null);
-					break;
-				case 'D':
-					g.drawImage(pacmanDownImage, player.x, player.y, Color.BLACK, null);
-					break;
-			}
+			g.drawImage(images.getPacmanDirectionImage(player.currDirection), player.x, player.y, Color.BLACK, null);
 		}
 		/* Draw the border around the game in case it was overwritten by ghost movement or something */
 		g.setColor(Color.WHITE);
