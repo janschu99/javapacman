@@ -1,8 +1,8 @@
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JApplet;
 import javax.swing.JFrame;
@@ -10,7 +10,7 @@ import javax.swing.Timer;
 
 /* This class contains the entire game... most of the game logic is in the Board class but this
    creates the gui and captures mouse and keyboard input, as well as controls the game states */
-public class Pacman extends JApplet implements MouseListener, KeyListener {
+public class Pacman extends JApplet {
 	
 	public static final int GRID_SIZE = 20; //GRID_SIZE is the size of one square in the game.
 	public static final int MAX = 400; //MAX is the height/width of the game.
@@ -25,8 +25,18 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		JFrame f = new JFrame(); //Create and set up window frame
 		f.setSize(420, 460);
 		f.add(b, BorderLayout.CENTER); //Add the board to the frame
-		b.addMouseListener(this); //Set listeners for mouse actions and button clicks
-		b.addKeyListener(this);
+		b.addMouseListener(new MouseAdapter() { //Set listeners for mouse actions and button clicks
+			@Override
+			public void mousePressed(MouseEvent e) { //This function detects user clicks on the menu items at the bottom of the screen
+				b.handleMouseClick(e.getX(), e.getY());
+			}
+		});
+		b.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) { //Handles user key presses
+				b.handleKeyboardKey(e.getKeyCode());
+			}
+		});
 		f.setVisible(true); //Make frame visible
 		f.setResizable(false); //Disable resizing
 		frameTimer = new Timer(30, e -> b.stepFrame(false, frameTimer)); //Create a timer that calls stepFrame every 30 milliseconds
@@ -34,29 +44,6 @@ public class Pacman extends JApplet implements MouseListener, KeyListener {
 		frameTimer.start(); //Start the timer
 		b.requestFocus();
 	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) { //Handles user key presses
-		b.handleKeyboardKey(e.getKeyCode());
-	}
-	
-	@Override
-	public void mousePressed(MouseEvent e) { //This function detects user clicks on the menu items at the bottom of the screen
-		b.handleMouseClick(e.getX(), e.getY());
-	}
-	
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-	@Override
-	public void mouseExited(MouseEvent e) {}
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-	@Override
-	public void keyReleased(KeyEvent e) {}
-	@Override
-	public void keyTyped(KeyEvent e) {}
 	
 	public static void main(String[] args) { //Main function simply creates a new pacman instance
 		new Pacman();
