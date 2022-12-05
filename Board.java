@@ -487,8 +487,7 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			else if (180<=x && x<=300) { //Clear high scores has been clicked
 				scoreManager.clearHighScores();
 				clearHighScores = true;
-			}
-			else if (350<=x && x<=420) System.exit(0); //Exit has been clicked
+			} else if (350<=x && x<=420) System.exit(0); //Exit has been clicked
 		}
 	}
 }

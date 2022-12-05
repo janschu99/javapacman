@@ -12,10 +12,10 @@ import javax.swing.Timer;
    creates the gui and captures mouse and keyboard input, as well as controls the game states */
 public class Pacman extends JApplet {
 	
+	public static final int BOARD_SIZE = 20; //BOARD_SIZE is the size of the game in squares
 	public static final int GRID_SIZE = 20; //GRID_SIZE is the size of one square in the game.
-	public static final int MAX = 400; //MAX is the height/width of the game.
+	public static final int MAX = BOARD_SIZE*GRID_SIZE; //MAX is the height/width of the game.
 	public static final int INCREMENT = 4; //INCREMENT is the speed at which the object moves, 1 INCREMENT per move() call
-	public static final int BOARD_SIZE = 20;
 	
 	private final Board b = new Board(); //Create a new board
 	private Timer frameTimer; //This timer is used to do request new frames be drawn
