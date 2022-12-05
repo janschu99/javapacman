@@ -1,8 +1,8 @@
 class Player extends Mover { //This is the pacman object
 	
 	/* Direction (inherited from Mover) is used in demoMode, currDirection and desiredDirection are used in non demoMode*/
-	char currDirection = 'L';
-	char desiredDirection = 'L';
+	Direction currDirection = Direction.LEFT;
+	Direction desiredDirection = Direction.LEFT;
 	boolean teleport = false; //teleport is true when travelling through the teleport tunnels
 	boolean stopped = false; //Stopped is set when the pacman is not moving or has been killed
 	
@@ -23,15 +23,8 @@ class Player extends Mover { //This is the pacman object
 		lastX = x;
 		lastY = y;
 		/* Try to turn in the direction input by the user */
-		/*Can only turn if we're in center of a grid*/
-		if (isChoiceDest() ||
-				/* Or if we're reversing*/
-				(desiredDirection=='L' && currDirection=='R') ||
-				(desiredDirection=='R' && currDirection=='L') ||
-				(desiredDirection=='U' && currDirection=='D') ||
-				(desiredDirection=='D' && currDirection=='U')) {
-			doMove(desiredDirection, false, true);
-		}
+		/*Can only turn if we're in center of a grid or if we're reversing*/
+		if (isChoiceDest() || currDirection.getReverse()==desiredDirection) doMove(desiredDirection, false, true);
 		if (lastX==x && lastY==y) { //If we haven't moved, then move in the direction the pacman was headed anyway
 			if (doMove(currDirection, true, true)) teleport = true;
 		} else currDirection = desiredDirection; //If we did change direction, update currDirection to reflect that

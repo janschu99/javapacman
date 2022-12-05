@@ -410,9 +410,9 @@ public class Board extends JPanel { //This board class contains the player, ghos
 			frameTimer.stop(); //Temporarily stop advancing frames
 			while (dying>0) stepFrame(false, frameTimer); //If user is dying, play dying animation
 			/* Move all game elements back to starting positions and orientations */
-			player.currDirection = 'L';
-			player.direction = 'L';
-			player.desiredDirection = 'L';
+			player.currDirection = Direction.LEFT;
+			player.direction = Direction.LEFT;
+			player.desiredDirection = Direction.LEFT;
 			player.x = 200;
 			player.y = 300;
 			ghost1.x = 180;
@@ -464,16 +464,16 @@ public class Board extends JPanel { //This board class contains the player, ghos
 		}
 		switch (keyCode) { //Otherwise, key presses control the player!
 			case KeyEvent.VK_LEFT:
-				player.desiredDirection = 'L';
+				player.desiredDirection = Direction.LEFT;
 				break;
 			case KeyEvent.VK_RIGHT:
-				player.desiredDirection = 'R';
+				player.desiredDirection = Direction.RIGHT;
 				break;
 			case KeyEvent.VK_UP:
-				player.desiredDirection = 'U';
+				player.desiredDirection = Direction.UP;
 				break;
 			case KeyEvent.VK_DOWN:
-				player.desiredDirection = 'D';
+				player.desiredDirection = Direction.DOWN;
 				break;
 		}
 		repaint();

@@ -37,15 +37,15 @@ public class GameImages {
 		return pacmanImage;
 	}
 	
-	public Image getPacmanDirectionImage(char direction) throws IllegalArgumentException {
+	public Image getPacmanDirectionImage(Direction direction) throws IllegalArgumentException {
 		switch (direction) {
-			case 'L':
+			case LEFT:
 				return pacmanLeftImage;
-			case 'R':
+			case RIGHT:
 				return pacmanRightImage;
-			case 'U':
+			case UP:
 				return pacmanUpImage;
-			case 'D':
+			case DOWN:
 				return pacmanDownImage;
 		}
 		throw new IllegalArgumentException("No pacman image for direction '"+direction+"'");
